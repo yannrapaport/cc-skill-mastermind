@@ -11,8 +11,7 @@ A Claude Code skill that launches parallel expert agents to review any topic —
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code) CLI (any recent version)
-- Runs best on Sonnet or Opus tier models (each review spawns 3–5 parallel agents)
+- [Claude Code](https://claude.ai/code) CLI with parallel agent support (Sonnet or Opus tier recommended)
 
 ## Installation
 
@@ -20,7 +19,7 @@ A Claude Code skill that launches parallel expert agents to review any topic —
 git clone https://github.com/yannrapaport/cc-skill-mastermind ~/.claude/skills/mastermind
 ```
 
-No restart needed — Claude Code picks up new skills automatically.
+To verify the install worked, run `/my-skills` in Claude Code — `mastermind` should appear in the list.
 
 ## Usage
 
@@ -49,7 +48,7 @@ Override auto-detection with a comma-separated list of role names (case-insensit
 
 Valid values: `CEO`, `PM`, `Designer`, `Dev`, `Reviewer`, `Architect`, `Documentation`, `Security`, `ProjectManager`
 
-If omitted, roles are inferred from the subject: technical subjects get `Architect + Dev + Reviewer`, product/strategy subjects get `CEO + PM + Reviewer`, etc. See `SKILL.md` for the full heuristics table.
+If omitted, roles are auto-detected from the subject type: technical subjects get `Architect + Dev + Reviewer`, product/strategy subjects get `CEO + PM + Reviewer`, broad or ambiguous subjects get all 5 defaults. See [SKILL.md](./SKILL.md) for the full heuristics table.
 
 ## Available roles
 
@@ -65,7 +64,7 @@ If omitted, roles are inferred from the subject: technical subjects get `Archite
 | Security | Bruce Schneier | Vulnerabilities, data, auth, compliance |
 | ProjectManager | Andy Grove | Planning, risks, dependencies, delivery |
 
-**Default roles (when no `--agents` flag):** CEO, PM, Dev, Architect, Reviewer
+**Default roles (for broad/ambiguous subjects):** CEO, PM, Dev, Architect, Reviewer
 
 > **Note:** The personas listed are fictional AI characters inspired by real public figures. This skill is not affiliated with or endorsed by any of the individuals mentioned.
 
@@ -84,53 +83,71 @@ scratchpad/
     └── synthesis.md   ← start here
 ```
 
-## Example output (synthesis excerpt)
+The `scratchpad/` folder is git-trackable — useful for sharing reviews with your team.
+
+## Example output
+
+The following is an actual synthesis produced by this skill:
 
 ```markdown
-# Mastermind Synthesis — Should we migrate to a monorepo?
+# Mastermind Synthesis — README.md clarity and actionability
 
 ## Verdict
-No — not yet. The case isn't strong enough to justify the migration cost at current team size.
+
+Yes with conditions: the README is functional and its example output is strong, but it
+ships with several gaps that will erode trust and generate friction before a first run.
 
 ---
 
 ## Consensus
 
-- The current multi-repo setup is causing real friction (shared library versioning, cross-repo PRs).
-- A monorepo would solve the coordination problem but introduce tooling complexity the team hasn't dealt with before.
-- The decision hinges on team size and CI/CD maturity, not on the monorepo concept itself.
+- The intro one-liner works — clear mental picture in one sentence.
+- The roles table is clean, scannable, and effective.
+- No error/failure coverage: what happens when an agent fails or synthesis runs with
+  partial inputs? Zero coverage.
+- Cost and model implications are inadequately communicated.
 
 ---
 
 ## Debates
 
-- **Timing**: Dev argues the team is too small to absorb the tooling overhead now; Architect
-  disagrees — earlier adoption means less migration debt later. Lean toward Dev's position
-  given current headcount.
-- **Tooling choice**: CEO wants to avoid Nx/Turborepo lock-in; Architect considers them
-  non-negotiable for a monorepo at scale. Worth a spike before committing.
+- **Structural reordering**: PM argues for leading with the example output — "here's what
+  you get" before "here's how it works." Documentation and Reviewer prefer filling gaps
+  in the current structure. Both are valid; depends on whether the goal is adoption or
+  documentation.
+- **Missing license**: Reviewer flags it as an adoption blocker for cautious engineers.
+  Others don't raise it. Probably right for a public repo targeting developers.
 
 ---
 
 ## Recommended actions
 
 ### Blockers
-1. Define the trigger criteria: at what team size / repo count does migration become worth it?
-2. Run a 1-week spike with one shared library extracted into a candidate monorepo — measure
-   actual CI impact before deciding.
+1. Add a verification step to the install flow — users have no way to confirm it worked.
+2. Document failure modes: skill not found, agent fails mid-run, partial synthesis.
+3. Add a cost/usage callout — spawning 5 Opus agents on a large codebase is not free.
 
 ### Polish
-- Document the current cross-repo dependency map to make the coordination cost visible.
-- Evaluate Turborepo vs. Nx on a throwaway branch (2 days max).
+- Add a second usage example targeting a code review use case (`./src/auth/`).
+- Add a LICENSE file — removes a silent adoption blocker for careful engineers.
+- Consider leading with the example output for conversion-optimized structure.
 
 ---
 
 ## Agents consulted
 
-- **CEO (Steve Jobs)**: Skeptical of tooling complexity — wants a crisp "why now" before committing.
-- **PM (Lenny Rachitsky)**: Supports migration if it unblocks the shared design system work.
-- **Dev (DHH)**: Against it at current scale — the cure is worse than the disease right now.
-- **Architect (John Carmack)**: Pro-migration but only with proper tooling; warns against DIY solutions.
-- **Reviewer (Dirty Harry)**: Called out the lack of any cost/rollback analysis as a red flag.
+- **Documentation (Richard Feynman)**: Praised the example output; flagged the missing
+  verification step and defaults contradiction as the clearest structural failures.
+- **Reviewer (Dirty Harry)**: Most adversarial read — flagged missing license, cost
+  blindspot, and vague version requirements as adoption blockers.
+- **PM (Lenny Rachitsky)**: Pushed on the missing emotional hook — the README explains
+  mechanics but doesn't answer "why should I care?"; proposed leading with example output.
 ```
 
+## Troubleshooting
+
+**Skill not found after install:** Run `/my-skills` to list active skills. If `mastermind` is missing, verify the clone landed in `~/.claude/skills/mastermind/` (not a subdirectory).
+
+**Agent fails mid-run:** The synthesis agent will note the gap explicitly in its output. Re-run with `--agents` to target specific roles.
+
+**Output folder not created:** The `scratchpad/` directory is created in your current working directory. Make sure you're running Claude Code from a writable project directory.
