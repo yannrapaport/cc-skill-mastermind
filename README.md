@@ -134,6 +134,3 @@ No — not yet. The case isn't strong enough to justify the migration cost at cu
 - **Reviewer (Dirty Harry)**: Called out the lack of any cost/rollback analysis as a red flag.
 ```
 
-## Cost note
-
-Each run spawns 3–5 parallel agents plus one synthesis agent. Expect roughly 6–10 API calls per `/mastermind` invocation. On Sonnet, this is fast (under 2 minutes) but not free.
