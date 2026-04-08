@@ -16,10 +16,8 @@ A Claude Code skill that launches parallel expert agents to review any topic —
 
 ## Installation
 
-Copy the `mastermind/` folder to your Claude Code skills directory:
-
 ```bash
-cp -r mastermind/ ~/.claude/skills/mastermind/
+git clone https://github.com/yannrapaport/cc-skill-mastermind ~/.claude/skills/mastermind
 ```
 
 No restart needed — Claude Code picks up new skills automatically.
