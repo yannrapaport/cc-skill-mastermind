@@ -87,26 +87,51 @@ scratchpad/
 ## Example output (synthesis excerpt)
 
 ```markdown
-# Mastermind Synthesis — API design ready for v1?
+# Mastermind Synthesis — Should we migrate to a monorepo?
 
 ## Verdict
-Not yet — two structural blockers before shipping.
+No — not yet. The case isn't strong enough to justify the migration cost at current team size.
+
+---
 
 ## Consensus
-- Error responses are inconsistent across endpoints
-- No pagination on list endpoints
+
+- The current multi-repo setup is causing real friction (shared library versioning, cross-repo PRs).
+- A monorepo would solve the coordination problem but introduce tooling complexity the team hasn't dealt with before.
+- The decision hinges on team size and CI/CD maturity, not on the monorepo concept itself.
+
+---
 
 ## Debates
-- Dev thinks cursor pagination is overkill at this scale; Architect disagrees
+
+- **Timing**: Dev argues the team is too small to absorb the tooling overhead now; Architect
+  disagrees — earlier adoption means less migration debt later. Lean toward Dev's position
+  given current headcount.
+- **Tooling choice**: CEO wants to avoid Nx/Turborepo lock-in; Architect considers them
+  non-negotiable for a monorepo at scale. Worth a spike before committing.
+
+---
 
 ## Recommended actions
+
 ### Blockers
-1. Standardize error envelope: { error: { code, message } } everywhere
-2. Add cursor-based pagination to /users and /events
+1. Define the trigger criteria: at what team size / repo count does migration become worth it?
+2. Run a 1-week spike with one shared library extracted into a candidate monorepo — measure
+   actual CI impact before deciding.
 
 ### Polish
-- Add request ID to all responses for traceability
-- Document rate limits in OpenAPI spec
+- Document the current cross-repo dependency map to make the coordination cost visible.
+- Evaluate Turborepo vs. Nx on a throwaway branch (2 days max).
+
+---
+
+## Agents consulted
+
+- **CEO (Steve Jobs)**: Skeptical of tooling complexity — wants a crisp "why now" before committing.
+- **PM (Lenny Rachitsky)**: Supports migration if it unblocks the shared design system work.
+- **Dev (DHH)**: Against it at current scale — the cure is worse than the disease right now.
+- **Architect (John Carmack)**: Pro-migration but only with proper tooling; warns against DIY solutions.
+- **Reviewer (Dirty Harry)**: Called out the lack of any cost/rollback analysis as a red flag.
 ```
 
 ## Cost note
