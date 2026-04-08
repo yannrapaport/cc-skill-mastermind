@@ -67,6 +67,8 @@ If omitted, roles are inferred from the subject: technical subjects get `Archite
 
 **Default roles (when no `--agents` flag):** CEO, PM, Dev, Architect, Reviewer
 
+> **Note:** The personas listed are fictional AI characters inspired by real public figures. This skill is not affiliated with or endorsed by any of the individuals mentioned.
+
 ## Output
 
 Each run creates a timestamped workspace inside `scratchpad/` in your current working directory (created if it doesn't exist). Re-runs on the same day increment a counter:
