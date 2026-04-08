@@ -2,6 +2,63 @@
 
 A Claude Code skill that launches parallel expert agents to review any topic — codebase, plan, spec, decision — from multiple perspectives, then synthesizes their findings into a single actionable report.
 
+## Example output
+
+```markdown
+# Mastermind Synthesis — README.md clarity and actionability
+
+## Verdict
+
+Yes with conditions: the README is functional and its example output is strong, but it
+ships with several gaps that will erode trust and generate friction before a first run.
+
+---
+
+## Consensus
+
+- The intro one-liner works — clear mental picture in one sentence.
+- The roles table is clean, scannable, and effective.
+- No error/failure coverage: what happens when an agent fails or synthesis runs with
+  partial inputs? Zero coverage.
+- Cost and model implications are inadequately communicated.
+
+---
+
+## Debates
+
+- **Structural reordering**: PM argues for leading with the example output — "here's what
+  you get" before "here's how it works." Documentation and Reviewer prefer filling gaps
+  in the current structure. Both are valid; depends on whether the goal is adoption or
+  documentation.
+- **Missing license**: Reviewer flags it as an adoption blocker for cautious engineers.
+  Others don't raise it. Probably right for a public repo targeting developers.
+
+---
+
+## Recommended actions
+
+### Blockers
+1. Add a verification step to the install flow — users have no way to confirm it worked.
+2. Document failure modes: skill not found, agent fails mid-run, partial synthesis.
+3. Add a cost/usage callout — spawning 5 Opus agents on a large codebase is not free.
+
+### Polish
+- Add a second usage example targeting a code review use case (`./src/auth/`).
+- Add a LICENSE file — removes a silent adoption blocker for careful engineers.
+- Consider leading with the example output for conversion-optimized structure.
+
+---
+
+## Agents consulted
+
+- **Documentation (Richard Feynman)**: Praised the example output; flagged the missing
+  verification step and defaults contradiction as the clearest structural failures.
+- **Reviewer (Dirty Harry)**: Most adversarial read — flagged missing license, cost
+  blindspot, and vague version requirements as adoption blockers.
+- **PM (Lenny Rachitsky)**: Pushed on the missing emotional hook — the README explains
+  mechanics but doesn't answer "why should I care?"; proposed leading with example output.
+```
+
 ## How it works
 
 1. You provide a subject (description, file path, or directory)
@@ -85,62 +142,6 @@ scratchpad/
 
 The `scratchpad/` folder is git-trackable — useful for sharing reviews with your team.
 
-## Example output
+## License
 
-The following is an actual synthesis produced by this skill:
-
-```markdown
-# Mastermind Synthesis — README.md clarity and actionability
-
-## Verdict
-
-Yes with conditions: the README is functional and its example output is strong, but it
-ships with several gaps that will erode trust and generate friction before a first run.
-
----
-
-## Consensus
-
-- The intro one-liner works — clear mental picture in one sentence.
-- The roles table is clean, scannable, and effective.
-- No error/failure coverage: what happens when an agent fails or synthesis runs with
-  partial inputs? Zero coverage.
-- Cost and model implications are inadequately communicated.
-
----
-
-## Debates
-
-- **Structural reordering**: PM argues for leading with the example output — "here's what
-  you get" before "here's how it works." Documentation and Reviewer prefer filling gaps
-  in the current structure. Both are valid; depends on whether the goal is adoption or
-  documentation.
-- **Missing license**: Reviewer flags it as an adoption blocker for cautious engineers.
-  Others don't raise it. Probably right for a public repo targeting developers.
-
----
-
-## Recommended actions
-
-### Blockers
-1. Add a verification step to the install flow — users have no way to confirm it worked.
-2. Document failure modes: skill not found, agent fails mid-run, partial synthesis.
-3. Add a cost/usage callout — spawning 5 Opus agents on a large codebase is not free.
-
-### Polish
-- Add a second usage example targeting a code review use case (`./src/auth/`).
-- Add a LICENSE file — removes a silent adoption blocker for careful engineers.
-- Consider leading with the example output for conversion-optimized structure.
-
----
-
-## Agents consulted
-
-- **Documentation (Richard Feynman)**: Praised the example output; flagged the missing
-  verification step and defaults contradiction as the clearest structural failures.
-- **Reviewer (Dirty Harry)**: Most adversarial read — flagged missing license, cost
-  blindspot, and vague version requirements as adoption blockers.
-- **PM (Lenny Rachitsky)**: Pushed on the missing emotional hook — the README explains
-  mechanics but doesn't answer "why should I care?"; proposed leading with example output.
-```
-
+MIT — see [LICENSE](./LICENSE).
