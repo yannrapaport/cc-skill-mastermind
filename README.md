@@ -144,10 +144,3 @@ ships with several gaps that will erode trust and generate friction before a fir
   mechanics but doesn't answer "why should I care?"; proposed leading with example output.
 ```
 
-## Troubleshooting
-
-**Skill not found after install:** Run `/my-skills` to list active skills. If `mastermind` is missing, verify the clone landed in `~/.claude/skills/mastermind/` (not a subdirectory).
-
-**Agent fails mid-run:** The synthesis agent will note the gap explicitly in its output. Re-run with `--agents` to target specific roles.
-
-**Output folder not created:** The `scratchpad/` directory is created in your current working directory. Make sure you're running Claude Code from a writable project directory.
