@@ -12,7 +12,6 @@ A Claude Code skill that launches parallel expert agents to review any topic —
 ## Requirements
 
 - [Claude Code](https://claude.ai/code) CLI (any recent version)
-- The **Agent tool** must be enabled — Claude Code enables it by default; check your settings if agents aren't launching
 - Runs best on Sonnet or Opus tier models (each review spawns 3–5 parallel agents)
 
 ## Installation
